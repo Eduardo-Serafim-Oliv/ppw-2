@@ -91,4 +91,4 @@ Route::get('/usuarios/{id}', function (int $id) {
 // Route::put('/produtos/{id}', [ProdutoController::class, 'update']);
 
 //Cria todas as rotas como acima, de acordo com o padrão REST, exceto as informadas.
-Route::resource ('produtos', ProdutoController::class)->except(['create', 'edit']);
+Route::resource ('produtos', ProdutoController::class);

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use Illuminate\Http\Request;
+use function Laravel\Prompts\select;
 
 class ProdutoController extends Controller
 {
@@ -11,13 +13,11 @@ class ProdutoController extends Controller
      */
     public function index()
     {
-        return response()->json([
 
-            ['id' => '1', 'Nome' => 'Tablet', 'Preço' => 'R$ 200'],
-            ['id' => '2', 'Nome' => 'Celular', 'Preço' => 'R$ 1500'],
-            ['id' => '3', 'Nome' => 'TV', 'Preço' => 'R$ 2450']
+        $produtos = DB::select('SELECT * FROM produtos');
 
-        ]);
+        return view("produtos.index", ['produtos' => $produtos]);
+
     }
 
     /**
@@ -25,7 +25,7 @@ class ProdutoController extends Controller
      */
     public function create()
     {
-        //
+        return view('produtos.create');
     }
 
     /**
@@ -33,7 +33,14 @@ class ProdutoController extends Controller
      */
     public function store(Request $request)
     {
-        return response()->json(['Mensagem' => 'Produto criado com sucesso'], 201);
+        $dados = $request->validate([
+            'nome' => 'required|min:3',
+            'preco' => 'required|numeric|min:0',
+        ]);
+
+        DB::insert('INSERT INTO produtos (nome, preco) VALUES (?, ?)', [$dados['nome'], $dados['preco']]);
+        return redirect('/produtos')->with('sucesso', 'Produto criado!');
+        // return response()->json(['Mensagem' => 'Produto valido e criado com sucesso', 'dados' => $dados], 201);
     }
 
     /**
@@ -41,7 +48,15 @@ class ProdutoController extends Controller
      */
     public function show(string $id)
     {
-        return response()->json(['id' => $id, 'Nome' => 'Produto ' . $id]);
+
+    //    else {
+
+        //     abort(404, 'Produto não encontrado');
+
+        $produto = DB::select('SELECT * FROM produtos WHERE id = ?', [$id]);
+        if (empty($produto)) abort(404, 'Produto não encontrado');
+        return view("produtos.show", ['produto' => $produto[0]]);
+
     }
 
     /**
@@ -49,7 +64,8 @@ class ProdutoController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $produto = DB::select('SELECT * FROM produtos WHERE id = ?', [$id]);
+        return view('produtos.edit', ['produto' => $produto[0]]);
     }
 
     /**
@@ -57,7 +73,10 @@ class ProdutoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        return response()->json(['Mensagem' => 'Produto ' . $id . ' atualizado com sucesso.'], 201);
+        DB::update('UPDATE produtos SET nome = ?, preco = ? WHERE id = ?', [$request->nome, $request->preco, $id]);
+        return redirect('/produtos')->with('sucesso', 'Produto atualizado!');
+
+        // return response()->json(['Mensagem' => 'Produto ' . $id . ' atualizado com sucesso.'], 201);
     }
 
     /**
@@ -65,6 +84,8 @@ class ProdutoController extends Controller
      */
     public function destroy(string $id)
     {
-        return response()->json(['Mensagem' => 'Produto ' . $id . ' removido'], 200);
+        DB::delete('DELETE FROM produtos WHERE id = ?', [$id]);
+        return redirect('/produtos')->with('sucesso', 'Produto excluído!');
+        // return response()->json(['Mensagem' => 'Produto ' . $id . ' removido'], 200);
     }
 }
