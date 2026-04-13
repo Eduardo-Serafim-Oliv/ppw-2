@@ -18,7 +18,9 @@
             </div>
         @endforelse
     </div>
-
+    
+    <br> <br>
+    <h5>Número de produtos encontrados: {{$quantProdutos}}</h5>
     <a href='/produtos/create' class='btn btn-primary btn-sm' style="margin-top: 1rem; margin-bottom: 1rem;">
              Cadastrar novo produto
             </a>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use Illuminate\Http\Request;
+use App\Models\Produto;
 use function Laravel\Prompts\select;
 
 class ProdutoController extends Controller
@@ -14,9 +15,11 @@ class ProdutoController extends Controller
     public function index()
     {
 
-        $produtos = DB::select('SELECT * FROM produtos');
+        // $produtos = DB::select('SELECT * FROM produtos');
 
-        return view("produtos.index", ['produtos' => $produtos]);
+        $produtos = Produto::orderBy('nome')->get();
+        $quantProdutos = Produto::count();
+        return view("produtos.index", compact("produtos", "quantProdutos"));
 
     }
 
@@ -34,11 +37,13 @@ class ProdutoController extends Controller
     public function store(Request $request)
     {
         $dados = $request->validate([
-            'nome' => 'required|min:3',
+            'nome' => 'required|string|min:3',
             'preco' => 'required|numeric|min:0',
         ]);
 
-        DB::insert('INSERT INTO produtos (nome, preco) VALUES (?, ?)', [$dados['nome'], $dados['preco']]);
+        // DB::insert('INSERT INTO produtos (nome, preco) VALUES (?, ?)', [$dados['nome'], $dados['preco']]);
+
+        Produto::create($dados);
         return redirect('/produtos')->with('sucesso', 'Produto criado!');
         // return response()->json(['Mensagem' => 'Produto valido e criado com sucesso', 'dados' => $dados], 201);
     }
@@ -48,14 +53,13 @@ class ProdutoController extends Controller
      */
     public function show(string $id)
     {
-
-    //    else {
-
         //     abort(404, 'Produto não encontrado');
 
-        $produto = DB::select('SELECT * FROM produtos WHERE id = ?', [$id]);
-        if (empty($produto)) abort(404, 'Produto não encontrado');
-        return view("produtos.show", ['produto' => $produto[0]]);
+        // $produto = DB::select('SELECT * FROM produtos WHERE id = ?', [$id]);
+        // if (empty($produto)) abort(404, 'Produto não encontrado');
+
+        $produto = Produto::findOrFail($id); // 404 automático
+        return view("produtos.show", compact("produto"));
 
     }
 
@@ -64,8 +68,9 @@ class ProdutoController extends Controller
      */
     public function edit(string $id)
     {
-        $produto = DB::select('SELECT * FROM produtos WHERE id = ?', [$id]);
-        return view('produtos.edit', ['produto' => $produto[0]]);
+        // $produto = DB::select('SELECT * FROM produtos WHERE id = ?', [$id]);
+        $produto = Produto::findOrFail($id);
+        return view('produtos.edit', compact('produto'));
     }
 
     /**
@@ -73,7 +78,14 @@ class ProdutoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        DB::update('UPDATE produtos SET nome = ?, preco = ? WHERE id = ?', [$request->nome, $request->preco, $id]);
+        // DB::update('UPDATE produtos SET nome = ?, preco = ? WHERE id = ?', [$request->nome, $request->preco, $id]);
+       
+        $produto = Produto::find($id);
+        $produto->update([
+            'nome'=> $request->nome,
+            'preco'=> $request->preco,
+        ]) ;
+
         return redirect('/produtos')->with('sucesso', 'Produto atualizado!');
 
         // return response()->json(['Mensagem' => 'Produto ' . $id . ' atualizado com sucesso.'], 201);
@@ -84,8 +96,26 @@ class ProdutoController extends Controller
      */
     public function destroy(string $id)
     {
-        DB::delete('DELETE FROM produtos WHERE id = ?', [$id]);
+        // DB::delete('DELETE FROM produtos WHERE id = ?', [$id]);
+
+        Produto::findOrFail($id)->delete();
         return redirect('/produtos')->with('sucesso', 'Produto excluído!');
         // return response()->json(['Mensagem' => 'Produto ' . $id . ' removido'], 200);
+    }
+    public function caros()
+    {
+
+        // $produtos = DB::select('SELECT * FROM produtos');
+
+        // $produtos = Produto::orderByDesc('preco')->get();
+
+        $produtos = Produto::where('preco', '>', 500)
+            ->orderByDesc('preco')
+            ->get();
+
+        $quantProdutos = $produtos->count();
+        return view("produtos.index", compact("produtos", "quantProdutos"));
+
+
     }
 }
