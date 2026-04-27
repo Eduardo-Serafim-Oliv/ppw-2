@@ -6,6 +6,8 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use  Illuminate\Database\Eloquent\Relations\BelongsTo;
+use  Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
@@ -22,6 +24,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'admin',
     ];
 
     /**
@@ -45,5 +48,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // Um usuário pode ter muitas avaliações
+    public function reviews(): HasMany{
+    return $this->hasMany(Review::class);
+// Eloquent infere: avaliacoes.user_id
+    }
+    public function picture_profile(): HasMany{
+    return $this->hasMany(Picture_Profile::class);
+// Eloquent infere: avaliacoes.user_id
     }
 }
