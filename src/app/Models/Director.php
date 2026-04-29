@@ -3,18 +3,26 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Director extends Model
 {
-     protected $fillable = [
+    protected $fillable = [
 
         'person_id'
     ];
 
-    public function person(): BelongsTo{
+    // O diretor pertence a uma pessoa
+    public function person(): BelongsTo
+    {
         return $this->belongsTo(Person::class);
     }
 
-        public function movies()
-            return $this->belongstoMany(return(Movie::class));
+    // Diretor aparece em muitos filmes
+    public function movies(): BelongsToMany
+    {
+        return $this->belongsToMany(Movie::class)
+            ->withTimestamps();
+    }
 }

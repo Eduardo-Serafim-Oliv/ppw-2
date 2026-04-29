@@ -10,12 +10,12 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('produtos', function (Blueprint $table) {
-            $table->text('descricao')->nullable();
-            $table->boolean('ativo')->default(false);
+        Schema::create('image_person', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('person_id')->constrained()->onDelete('cascade');
+            $table->foreignId('image_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
-
     }
 
     /**
@@ -23,6 +23,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('image_person');
     }
 };

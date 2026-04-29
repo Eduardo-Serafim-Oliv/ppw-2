@@ -3,18 +3,25 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Producer extends Model
 {
-     protected $fillable = [
+    protected $fillable = [
 
         'person_id'
     ];
 
-     public function person(): BelongsTo{
+    // O produtor pertence a uma pessoa
+    public function person(): BelongsTo
+    {
         return $this->belongsTo(Person::class);
     }
 
-        public function movies()
-            return $this->belongstoMany(return(Movies::class));
+    // Produtor aparece em muitos filmes
+    public function movies(): BelongsToMany
+    {
+        return $this->belongstoMany(Movie::class);
+    }
 }

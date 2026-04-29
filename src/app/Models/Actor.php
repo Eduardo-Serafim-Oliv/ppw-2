@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Actor extends Model
 {
@@ -12,10 +14,16 @@ class Actor extends Model
     ];
 
     // O ator pertence a uma pessoa
-    public function person(): BelongsTo{
+    public function person(): BelongsTo
+    {
         return $this->belongsTo(Person::class);
     }
 
-        public function movies()
-            return $this->belongstoMany(return(Movie::class));
+    // Ator aparece em muitos filmes
+    public function movies(): BelongsToMany
+    {
+        return $this->belongsToMany(Movie::class)
+            ->withPivot('papel')
+            ->withTimestamps();
+    }
 }

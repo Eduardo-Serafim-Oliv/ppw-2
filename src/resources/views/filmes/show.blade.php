@@ -1,4 +1,4 @@
-<h1>{{$filme->nome}}</h1>
+<h1>{{ $filme->nome }}</h1>
 
 @foreach ($avaliacoes as $av)
     <div class="card mb-2">

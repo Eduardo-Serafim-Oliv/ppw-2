@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Movie;
 use Illuminate\Http\Request;
 
-class FilmeController extends Controller
+class MovieController extends Controller
 {
     /**
      * Display a listing of the resource.

@@ -51,12 +51,15 @@ class User extends Authenticatable
     }
 
     // Um usuário pode ter muitas avaliações
-    public function reviews(): HasMany{
-    return $this->hasMany(Review::class);
-// Eloquent infere: avaliacoes.user_id
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+        // Eloquent infere: reviews.user_id
     }
-    public function picture_profile(): HasMany{
-    return $this->hasMany(Picture_Profile::class);
-// Eloquent infere: avaliacoes.user_id
+
+    public function profile_pictures(): HasMany
+    {
+        return $this->hasMany(Profile_Picture::class);
+        // Eloquent infere: profile_pictures.user_id
     }
 }

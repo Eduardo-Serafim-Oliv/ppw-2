@@ -15,11 +15,12 @@ class Review extends Model
         'descricao',
     ];
 
-    public function user(){
+    // A avaliação pertence a um usuário
+    public function user(): BelongsTo {
          return $this->belongsTo(User::class);
     }
     // A avaliação também pertence a um filme
-    public function movie() {
+    public function movie(): BelongsTo{
          return $this->belongsTo(Movie::class);
     }
 

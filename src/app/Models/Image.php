@@ -3,23 +3,31 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Image extends Model
 {
-     protected $fillable = [
+       protected $fillable = [
 
-        'caminho',
-        'nome',
-    ];
+              'caminho',
+              'nome',
+       ];
 
-     public function pessoas()
-            return $this->belongstoMany(return(Person::class));
+       public function people(): BelongsToMany
+       {
+              return $this->belongsToMany(Person::class)
+                     ->withTimestamps();
+       }
 
-     public function filmes()
-            return $this->belongstoMany(return(Movie::class));
+       public function movies(): BelongsToMany
+       {
+              return $this->belongstoMany(Movie::class)
+                     ->withTimestamps();
+       }
 
-     public function estudios()
-            return $this->belongstoMany(return(Studio::class));
-
-
+       public function studios(): BelongsToMany
+       {
+              return $this->belongstoMany(Studio::class)
+                     ->withTimestamps();
+       }
 }

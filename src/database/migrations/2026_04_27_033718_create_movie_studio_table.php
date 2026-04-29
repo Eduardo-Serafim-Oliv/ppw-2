@@ -10,9 +10,9 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('producer_movies', function (Blueprint $table) {
+        Schema::create('movie_studio', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('producer_id')->constrained()->onDelete('cascade');
+            $table->foreignId('studio_id')->constrained()->onDelete('cascade');
             $table->foreignId('movie_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
@@ -23,6 +23,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('producer_movies');
+        Schema::dropIfExists('movie_studio');
     }
 };
