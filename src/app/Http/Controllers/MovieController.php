@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Movie;
 use Illuminate\Http\Request;
 
@@ -35,11 +36,11 @@ class MovieController extends Controller
      */
     public function show(string $id)
     {
-        
+
         $filme = Movie::findOrFail($id);
         // Carrega as avaliações com osusuários já incluídos
-        $avaliacoes = $filme->avaliacoes()->with('user')->orderBy('created_at', 'desc')->get();
-        return view('filmes.show',compact('filme', 'avaliacoes'));
+        $avaliacoes = $filme->reviews()->with('user')->orderBy('created_at', 'desc')->get();
+        return view('filmes.show', compact('filme', 'avaliacoes'));
     }
 
     /**

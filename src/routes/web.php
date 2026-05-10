@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\FilmeController;
+use App\Http\Controllers\MovieController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
 // Rota GET com retorno JSON
@@ -94,5 +95,8 @@ Route::get('/usuarios/{id}', function (int $id) {
 //Cria todas as rotas como acima, de acordo com o padrão REST, exceto as informadas.
 
 Route::get('/produtos/caros', [ProdutoController::class, 'caros']);
-Route::resource('filmes', FilmeController::class);
-Route::resource ('produtos', ProdutoController::class);
+Route::resource('filmes', MovieController::class)
+    ->middleware('auth');
+Route::resource('produtos', ProdutoController::class);
+
+require __DIR__ . '/auth.php';
