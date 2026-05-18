@@ -24,8 +24,19 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'admin',
+        'role',
     ];
+
+    // Verifica se o usuário é administrador
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+    // Verifica se o usuário é um usuário comum
+    public function isUsuario(): bool
+    {
+        return $this->role === 'usuario';
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -36,6 +47,7 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
 
     /**
      * Get the attributes that should be cast.

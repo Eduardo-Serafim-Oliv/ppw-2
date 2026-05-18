@@ -5,10 +5,6 @@ use App\Http\Controllers\FilmeController;
 use App\Http\Controllers\MovieController;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
 Route::get('/', function () {
     return view('home');
 });
@@ -94,9 +90,28 @@ Route::get('/usuarios/{id}', function (int $id) {
 
 //Cria todas as rotas como acima, de acordo com o padrão REST, exceto as informadas.
 
-Route::get('/produtos/caros', [ProdutoController::class, 'caros']);
-Route::resource('filmes', MovieController::class)
-    ->middleware('auth');
-Route::resource('produtos', ProdutoController::class);
+// Route::resource('filmes', MovieController::class)
+//     ->middleware('auth');
+
+// Grupo de rotas protegidas
+Route::middleware(['auth', 'admin'])->group(function () {
+
+    Route::resource('filmes', MovieController::class)
+        ->except(['index', 'show']);
+
+    //  Route::resource('atores', AtorController::class)
+    //  ->except(['index', 'show']);
+
+    //  Route::resource('diretores', DiretorController::class)
+    //  ->except(['index', 'show']);
+
+    Route::get('/admin', function () {
+        return view('admin');
+    });
+});
+
+// Rotas públicas — sem middleware
+Route::get('/filmes', [MovieController::class, 'index']);
+Route::get('/filmes/{id}', [MovieController::class, 'show']);
 
 require __DIR__ . '/auth.php';

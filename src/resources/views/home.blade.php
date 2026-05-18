@@ -4,10 +4,25 @@
 
 @section('conteudo')
 
-    <h1>Página Inicial</h1>
+    <h1 style="text-align: center" class="mt-4">CineReview</h1>
+    <h5 style="text-align: center; border-bottom:solid black 1px; margin-left: 10%; margin-right: 10%  "
+        class="mt-3 mb-4 p-2">
+        Bem vindo, procure por filmes,
+        atores,
+        diretores, produtores, estúdios e faça sua
+        avalição!</h5>
 
-    <br> <br>
+    @include('partials.carousel')
 
+
+    @include('partials.cards-atores')
+    @include('partials.cards-filmes')
+
+
+
+    {{-- <a href="/filmes/{{ 1 }}" class="btn btn-primary">
+        Visualizar este filme
+    </a> --}}
 
 
 @endsection
